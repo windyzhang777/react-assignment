@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { DataChart } from "./DataChart";
 import { DataTable } from "./DataTable";
+import DataTabs from "./DataTabs";
 
 function App() {
   const [customerData, setCustomerData] = useState(null);
+  const [tab, setTab] = useState(0);
 
   useEffect(() => {
     fetch("/getTransactions", {
@@ -63,6 +65,10 @@ function App() {
     [customerData]
   );
 
+  const handleTabChange = (e, tab) => {
+    setTab(tab);
+  };
+
   return (
     <>
       <DataChart
@@ -70,10 +76,25 @@ function App() {
         getSortedPointsArr={getSortedPointsArr}
         sortUsers={sortUsers}
       />
-      <DataTable
-        customerData={customerData}
-        getSortedPointsArr={getSortedPointsArr}
-        sortUsers={sortUsers}
+      <DataTabs
+        handleTabChange={handleTabChange}
+        tab={tab}
+        table1={
+          <DataTable
+            customerData={customerData}
+            isTx={true}
+            getSortedPointsArr={getSortedPointsArr}
+            sortUsers={sortUsers}
+          />
+        }
+        table2={
+          <DataTable
+            customerData={customerData}
+            isTx={false}
+            getSortedPointsArr={getSortedPointsArr}
+            sortUsers={sortUsers}
+          />
+        }
       />
     </>
   );

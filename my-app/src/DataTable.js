@@ -5,9 +5,17 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import * as React from "react";
+import { useCallback, useMemo } from "react";
 
-const MONTHS = [
+const TABLE1HEADING = [
+  "User Id",
+  "Transactions($)",
+  "Created At",
+];
+
+const TABLE2HEADING = [
+  "User Id",
+  "Total Points",
   "March(Points)",
   "April(Points)",
   "May(Points)",
@@ -15,18 +23,74 @@ const MONTHS = [
 
 export function DataTable({
   customerData,
+  isTx,
   getSortedPointsArr,
   sortUsers,
 }) {
-  const handleDataTransform = (data) => {
-    const allUserIds = sortUsers(data);
-    const res = [];
-    for (const id of allUserIds) {
-      const arr = getSortedPointsArr(id);
-      res.push({ id: id, points: arr });
-    }
-    return res;
-  };
+  const handleDataTransform = useCallback(
+    (data) => {
+      const allUserIds = sortUsers(data);
+      const res = [];
+      for (const id of allUserIds) {
+        const arr = getSortedPointsArr(id);
+        res.push({ id: id, points: arr });
+      }
+      return res;
+    },
+    [getSortedPointsArr, sortUsers]
+  );
+
+  const tableHeading = useMemo(
+    () => (isTx ? TABLE1HEADING : TABLE2HEADING),
+    [isTx]
+  );
+
+  const tableBody = useMemo(
+    () =>
+      isTx
+        ? customerData?.map((user) => (
+            <TableRow
+              key={user?.id}
+              sx={{
+                "&:last-child td, &:last-child th": {
+                  border: 0,
+                },
+              }}
+            >
+              <TableCell component="th" scope="row">
+                {user?.id}
+              </TableCell>
+              <TableCell align="right">
+                {user?.amount}
+              </TableCell>
+              <TableCell align="right">
+                {user?.createdat
+                  .replace(/[TZ]/g, " ")
+                  .trim()}
+              </TableCell>
+            </TableRow>
+          ))
+        : handleDataTransform(customerData)?.map((user) => (
+            <TableRow
+              key={user?.id}
+              sx={{
+                "&:last-child td, &:last-child th": {
+                  border: 0,
+                },
+              }}
+            >
+              <TableCell component="th" scope="row">
+                {user?.id}
+              </TableCell>
+              {user?.points?.map((p, index) => (
+                <TableCell key={index} align="right">
+                  {p}
+                </TableCell>
+              ))}
+            </TableRow>
+          )),
+    [isTx, customerData, handleDataTransform]
+  );
 
   return (
     <TableContainer component={Paper}>
@@ -36,39 +100,17 @@ export function DataTable({
       >
         <TableHead>
           <TableRow>
-            <TableCell>User Id</TableCell>
-            <TableCell align="right">
-              Total Points
-            </TableCell>
-            {MONTHS.map((month, index) => (
-              <TableCell align="right" key={index}>
+            {tableHeading.map((month, index) => (
+              <TableCell
+                align={index === 0 ? "" : "right"}
+                key={index}
+              >
                 {month}
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
-        <TableBody>
-          {handleDataTransform(customerData)?.map(
-            (user) => (
-              <TableRow
-                key={user.id}
-                sx={{
-                  "&:last-child td, &:last-child th": {
-                    border: 0,
-                  },
-                }}
-              >
-                <TableCell component="th" scope="row">
-                  {user.id}
-                </TableCell>
-                {user?.points &&
-                  user.points.map((p) => (
-                    <TableCell align="right">{p}</TableCell>
-                  ))}
-              </TableRow>
-            )
-          )}
-        </TableBody>
+        <TableBody>{tableBody}</TableBody>
       </Table>
     </TableContainer>
   );
