@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { DataChart } from "./DataChart";
-import { DataTable } from "./DataTable";
-import DataTabs from "./DataTabs";
+import { DataChart } from "./components/DataChart";
+import { DataTable } from "./components/DataTable";
+import { DataTabs } from "./components/DataTabs";
 
 function App() {
   const [customerData, setCustomerData] = useState(null);

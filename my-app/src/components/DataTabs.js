@@ -20,9 +20,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
+        <Box sx={{ p: 3 }}>{children}</Box>
       )}
     </div>
   );
@@ -35,7 +33,7 @@ function a11yProps(index) {
   };
 }
 
-export default function DataTabs({
+export function DataTabs({
   handleTabChange,
   tab,
   table1,

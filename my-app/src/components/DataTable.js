@@ -48,9 +48,9 @@ export function DataTable({
   const tableBody = useMemo(
     () =>
       isTx
-        ? customerData?.map((user) => (
+        ? customerData?.map((user, index) => (
             <TableRow
-              key={user?.id}
+              key={index}
               sx={{
                 "&:last-child td, &:last-child th": {
                   border: 0,
@@ -70,25 +70,27 @@ export function DataTable({
               </TableCell>
             </TableRow>
           ))
-        : handleDataTransform(customerData)?.map((user) => (
-            <TableRow
-              key={user?.id}
-              sx={{
-                "&:last-child td, &:last-child th": {
-                  border: 0,
-                },
-              }}
-            >
-              <TableCell component="th" scope="row">
-                {user?.id}
-              </TableCell>
-              {user?.points?.map((p, index) => (
-                <TableCell key={index} align="right">
-                  {p}
+        : handleDataTransform(customerData)?.map(
+            (user, index) => (
+              <TableRow
+                key={index}
+                sx={{
+                  "&:last-child td, &:last-child th": {
+                    border: 0,
+                  },
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {user?.id}
                 </TableCell>
-              ))}
-            </TableRow>
-          )),
+                {user?.points?.map((p, index) => (
+                  <TableCell key={index} align="right">
+                    {p}
+                  </TableCell>
+                ))}
+              </TableRow>
+            )
+          ),
     [isTx, customerData, handleDataTransform]
   );
 
@@ -102,7 +104,7 @@ export function DataTable({
           <TableRow>
             {tableHeading.map((month, index) => (
               <TableCell
-                align={index === 0 ? "" : "right"}
+                align={index === 0 ? "inherit" : "right"}
                 key={index}
               >
                 {month}
