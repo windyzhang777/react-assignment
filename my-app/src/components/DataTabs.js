@@ -1,11 +1,10 @@
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import Typography from "@mui/material/Typography";
 import React from "react";
 
 const TABS = [
-  "Raw Transactions & Reward Points",
+  "Transactions & Points",
   "Reward Points by UserId",
 ];
 
@@ -41,7 +40,10 @@ export function DataTabs({
 }) {
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        mt={4}
+        sx={{ borderBottom: 1, borderColor: "divider" }}
+      >
         <Tabs
           value={tab}
           onChange={handleTabChange}

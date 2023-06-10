@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { DataChart } from "./components/DataChart";
 import { DataTable } from "./components/DataTable";
@@ -70,7 +71,7 @@ function App() {
   };
 
   return (
-    <>
+    <Box m={1} sx={{ maxWidth: "800px" }}>
       <DataChart
         customerData={customerData}
         getSortedPointsArr={getSortedPointsArr}
@@ -96,7 +97,7 @@ function App() {
           />
         }
       />
-    </>
+    </Box>
   );
 }
 
