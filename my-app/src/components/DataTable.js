@@ -127,8 +127,8 @@ export function DataTable({
     [handleRequestSort]
   );
 
-  const visibleRows = useCallback(
-    (data) =>
+  const visibleRows = useMemo(
+    () =>
       stableSort(
         data,
         getComparator(order, orderBy)
@@ -136,7 +136,7 @@ export function DataTable({
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [orderBy, page, rowsPerPage, order]
+    [data, orderBy, page, rowsPerPage, order]
   );
 
   const handleChangePage = (event, newPage) => {
@@ -214,7 +214,7 @@ export function DataTable({
   const tableBodyContent = useMemo(
     () =>
       isTx
-        ? visibleRows(data)?.map((row, index) => (
+        ? visibleRows?.map((row, index) => (
             <TableRow
               hover
               tabIndex={-1}
@@ -242,40 +242,42 @@ export function DataTable({
               </TableCell>
             </TableRow>
           ))
-        : visibleRows(handleDataTransform(data))?.map(
-            (row, index) => (
-              <TableRow
-                key={index}
-                sx={{
-                  "&:last-child td, &:last-child th": {
-                    border: 0,
-                  },
-                }}
-              >
-                <TableCell component="th" scope="row">
-                  {row?.id}
-                </TableCell>
-                <TableCell align="right">
-                  {row?.total}
-                </TableCell>
-                <TableCell align="right">
-                  {row?.march}
-                </TableCell>
-                <TableCell align="right">
-                  {row?.april}
-                </TableCell>
-                <TableCell align="right">
-                  {row?.may}
-                </TableCell>
-              </TableRow>
-            )
-          ),
-    [isTx, data, handleDataTransform, visibleRows]
+        : visibleRows?.map((row, index) => (
+            <TableRow
+              key={index}
+              sx={{
+                "&:last-child td, &:last-child th": {
+                  border: 0,
+                },
+              }}
+            >
+              <TableCell component="th" scope="row">
+                {row?.id}
+              </TableCell>
+              <TableCell align="right">
+                {row?.total}
+              </TableCell>
+              <TableCell align="right">
+                {row?.march}
+              </TableCell>
+              <TableCell align="right">
+                {row?.april}
+              </TableCell>
+              <TableCell align="right">
+                {row?.may}
+              </TableCell>
+            </TableRow>
+          )),
+    [isTx, visibleRows]
   );
 
   useEffect(() => {
-    setData(customerData);
-  }, [customerData]);
+    if (isTx) {
+      setData(customerData);
+    } else {
+      setData(handleDataTransform(customerData));
+    }
+  }, [customerData, handleDataTransform, isTx]);
 
   return (
     <Paper sx={{ width: "100%", mb: 2 }}>
