@@ -40,7 +40,7 @@ const TABLE1_HEADING = [
     id: "amount",
     align: "right",
     disablePadding: true,
-    label: "Transactions($)",
+    label: "Transaction Amount($)",
   },
   {
     id: "createdat",
