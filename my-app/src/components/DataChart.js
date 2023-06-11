@@ -39,17 +39,19 @@ export const options = {
 
 export function DataChart({
   customerData,
-  getSortedPointsArr,
+  getDataByPoints,
   sortUsers,
 }) {
   const handleDataTransform = (data) => {
     const allUserIds = sortUsers(data);
     const res = [];
     for (const id of allUserIds) {
-      const arr = getSortedPointsArr(id);
+      const arr = Object.values(getDataByPoints(id))?.slice(
+        1
+      );
       for (let i = 0; i < arr.length; i++) {
         if (!res[i]) {
-          res[i] = [];
+          res[i] = [arr[i]];
         } else {
           res[i].push(arr[i]);
         }

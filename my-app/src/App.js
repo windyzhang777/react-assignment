@@ -19,7 +19,7 @@ function App() {
           ...d,
           points: calcPointsPerTx(d.amount),
         }));
-        updated.sort((a, b) => a.id < b.id);
+        updated?.sort((a, b) => a.id < b.id);
         setCustomerData(updated);
       });
   }, []);
@@ -40,19 +40,20 @@ function App() {
     const users = Array.from(
       new Set(data?.map((d) => d.id)).values()
     );
-    users.sort((a, b) => a - b);
+    users?.sort((a, b) => a - b);
     return users;
   };
 
-  const getSortedPointsArr = useCallback(
+  const getDataByPoints = useCallback(
     (userId) => {
       const userData = customerData?.filter(
         (d) => d.id === userId
       );
-      const monthMap = { 3: 0, 4: 0, 5: 0 };
+      const monthMap = { march: 0, april: 0, may: 0 };
       const total = userData?.reduce((acc, cur) => {
-        const month =
-          new Date(cur.createdat).getMonth() + 1;
+        const month = new Date(cur.createdat)
+          .toLocaleString("en-US", { month: "long" })
+          .toLocaleLowerCase();
         if (!monthMap[month]) {
           monthMap[month] = cur.points;
         } else {
@@ -61,7 +62,11 @@ function App() {
         acc += cur.points;
         return acc;
       }, 0);
-      return [total, ...Object.values(monthMap)];
+      return {
+        id: userId,
+        total,
+        ...monthMap,
+      };
     },
     [customerData]
   );
@@ -74,7 +79,7 @@ function App() {
     <Box m={1} sx={{ maxWidth: "800px" }}>
       <DataChart
         customerData={customerData}
-        getSortedPointsArr={getSortedPointsArr}
+        getDataByPoints={getDataByPoints}
         sortUsers={sortUsers}
       />
       <DataTabs
@@ -84,7 +89,7 @@ function App() {
           <DataTable
             customerData={customerData}
             isTx={true}
-            getSortedPointsArr={getSortedPointsArr}
+            getDataByPoints={getDataByPoints}
             sortUsers={sortUsers}
           />
         }
@@ -92,7 +97,7 @@ function App() {
           <DataTable
             customerData={customerData}
             isTx={false}
-            getSortedPointsArr={getSortedPointsArr}
+            getDataByPoints={getDataByPoints}
             sortUsers={sortUsers}
           />
         }
