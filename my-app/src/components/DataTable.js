@@ -32,25 +32,25 @@ A customer receives 2 points for every dollar spent over $100 in each transactio
 const TABLE1_HEADING = [
   {
     id: "id",
-    numeric: false,
+    align: "left",
     disablePadding: true,
     label: "User Id",
   },
   {
     id: "amount",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "Transactions($)",
   },
   {
     id: "createdat",
-    numeric: true,
-    disablePadding: true,
+    align: "right",
+    disablePadding: false,
     label: "Created At",
   },
   {
     id: "points",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "Reward Points",
     tooltip: (
@@ -68,31 +68,31 @@ const TABLE1_HEADING = [
 const TABLE2_HEADING = [
   {
     id: "id",
-    numeric: false,
+    align: "left",
     disablePadding: true,
     label: "User Id",
   },
   {
     id: "total",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "Total Points",
   },
   {
     id: "march",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "March(Points)",
   },
   {
     id: "april",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "April(Points)",
   },
   {
     id: "may",
-    numeric: true,
+    align: "right",
     disablePadding: true,
     label: "May(Points)",
   },
@@ -171,7 +171,7 @@ export function DataTable({
         {tableHeading?.map((headCell, index) => (
           <TableCell
             key={index}
-            align={headCell.numeric ? "right" : "left"}
+            align={headCell.align}
             padding={
               headCell.disablePadding ? "none" : "normal"
             }
