@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import React from "react";
+import React, { useMemo } from "react";
+import { DataTable } from "./DataTable";
 
 const TABS = [
   "Transactions & Points",
@@ -33,11 +34,34 @@ function a11yProps(index) {
 }
 
 export function DataTabs({
+  customerData,
+  getDataByPoints,
   handleTabChange,
+  sortUsers,
   tab,
-  table1,
-  table2,
 }) {
+  const table1 = useMemo(
+    () => (
+      <DataTable
+        customerData={customerData}
+        isTx={true}
+        getDataByPoints={getDataByPoints}
+        sortUsers={sortUsers}
+      />
+    ),
+    [customerData, getDataByPoints, sortUsers]
+  );
+  const table2 = useMemo(
+    () => (
+      <DataTable
+        customerData={customerData}
+        isTx={false}
+        getDataByPoints={getDataByPoints}
+        sortUsers={sortUsers}
+      />
+    ),
+    [customerData, getDataByPoints, sortUsers]
+  );
   return (
     <>
       <Box

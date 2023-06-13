@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { DataChart } from "./components/DataChart";
-import { DataTable } from "./components/DataTable";
 import { DataTabs } from "./components/DataTabs";
 
 function App() {
@@ -83,24 +82,11 @@ function App() {
         sortUsers={sortUsers}
       />
       <DataTabs
+        customerData={customerData}
+        getDataByPoints={getDataByPoints}
         handleTabChange={handleTabChange}
+        sortUsers={sortUsers}
         tab={tab}
-        table1={
-          <DataTable
-            customerData={customerData}
-            isTx={true}
-            getDataByPoints={getDataByPoints}
-            sortUsers={sortUsers}
-          />
-        }
-        table2={
-          <DataTable
-            customerData={customerData}
-            isTx={false}
-            getDataByPoints={getDataByPoints}
-            sortUsers={sortUsers}
-          />
-        }
       />
     </Box>
   );
