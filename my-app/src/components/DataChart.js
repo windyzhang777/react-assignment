@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import React, { useCallback, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
+import { useTransactionContext } from "../hooks/useTransactionContext";
 
 ChartJS.register(
   CategoryScale,
@@ -37,11 +38,9 @@ export const options = {
   },
 };
 
-export function DataChart({
-  customerData,
-  getDataByPoints,
-  sortUsers,
-}) {
+export function DataChart({ getDataByPoints, sortUsers }) {
+  const { transaction } = useTransactionContext();
+
   const handleDataTransform = useCallback(
     (data) => {
       const allUserIds = sortUsers(data);
@@ -65,26 +64,26 @@ export function DataChart({
 
   const data = useMemo(() => {
     return {
-      labels: sortUsers(customerData),
+      labels: sortUsers(transaction),
       datasets: [
         {
           label: "March",
-          data: handleDataTransform(customerData)[1],
+          data: handleDataTransform(transaction)[1],
           backgroundColor: "rgb(255, 99, 132)",
         },
         {
           label: "April",
-          data: handleDataTransform(customerData)[2],
+          data: handleDataTransform(transaction)[2],
           backgroundColor: "rgb(75, 192, 192)",
         },
         {
           label: "May",
-          data: handleDataTransform(customerData)[3],
+          data: handleDataTransform(transaction)[3],
           backgroundColor: "rgb(53, 162, 235)",
         },
       ],
     };
-  }, [customerData, handleDataTransform, sortUsers]);
+  }, [transaction, handleDataTransform, sortUsers]);
 
   return <Bar options={options} data={data} />;
 }

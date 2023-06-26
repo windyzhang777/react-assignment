@@ -34,7 +34,6 @@ function a11yProps(index) {
 }
 
 export function DataTabs({
-  customerData,
   getDataByPoints,
   handleTabChange,
   sortUsers,
@@ -43,24 +42,22 @@ export function DataTabs({
   const table1 = useMemo(
     () => (
       <DataTable
-        customerData={customerData}
         isTx={true}
         getDataByPoints={getDataByPoints}
         sortUsers={sortUsers}
       />
     ),
-    [customerData, getDataByPoints, sortUsers]
+    [getDataByPoints, sortUsers]
   );
   const table2 = useMemo(
     () => (
       <DataTable
-        customerData={customerData}
         isTx={false}
         getDataByPoints={getDataByPoints}
         sortUsers={sortUsers}
       />
     ),
-    [customerData, getDataByPoints, sortUsers]
+    [getDataByPoints, sortUsers]
   );
   return (
     <>

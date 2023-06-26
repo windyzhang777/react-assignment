@@ -2,15 +2,16 @@ import { Box } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { DataChart } from "./components/DataChart";
 import { DataTabs } from "./components/DataTabs";
+import { useTransactionContext } from "./hooks/useTransactionContext";
 
-function App() {
-  const [customerData, setCustomerData] = useState(null);
+export default function App() {
   const [tab, setTab] = useState(0);
+  const { transaction, dispatch } = useTransactionContext();
 
   useEffect(() => {
     fetch("/getTransactions", {
       method: "GET",
-      header: { "context-type": "application/json" },
+      header: { "Context-Type": "application/json" },
     })
       .then((res) => res.json())
       .then((data) => {
@@ -19,9 +20,9 @@ function App() {
           points: calcPointsPerTx(d.amount),
         }));
         updated?.sort((a, b) => a.id < b.id);
-        setCustomerData(updated);
+        dispatch({ type: "GET_ALL_TX", payload: updated });
       });
-  }, []);
+  }, [dispatch]);
 
   const calcPointsPerTx = (tx) => {
     let points = 0;
@@ -45,7 +46,7 @@ function App() {
 
   const getDataByPoints = useCallback(
     (userId) => {
-      const userData = customerData?.filter(
+      const userData = transaction?.filter(
         (d) => d.id === userId
       );
       const monthMap = { march: 0, april: 0, may: 0 };
@@ -67,7 +68,7 @@ function App() {
         ...monthMap,
       };
     },
-    [customerData]
+    [transaction]
   );
 
   const handleTabChange = (e, tab) => {
@@ -77,12 +78,10 @@ function App() {
   return (
     <Box m={1} sx={{ maxWidth: "800px" }}>
       <DataChart
-        customerData={customerData}
         getDataByPoints={getDataByPoints}
         sortUsers={sortUsers}
       />
       <DataTabs
-        customerData={customerData}
         getDataByPoints={getDataByPoints}
         handleTabChange={handleTabChange}
         sortUsers={sortUsers}
@@ -91,5 +90,3 @@ function App() {
     </Box>
   );
 }
-
-export default App;

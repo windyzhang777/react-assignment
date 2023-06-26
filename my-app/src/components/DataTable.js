@@ -23,6 +23,7 @@ import {
   getComparator,
   stableSort,
 } from "../helpers/stableSort";
+import { useTransactionContext } from "../hooks/useTransactionContext";
 
 const REWARD_DISCLAIMER = `
 A customer receives 2 points for every dollar spent over $100 in each transaction, plus 1 point for every dollar spent between $50 and $100 in each transaction.
@@ -99,17 +100,16 @@ const TABLE2_HEADING = [
 ];
 
 export function DataTable({
-  customerData,
   isTx,
   getDataByPoints,
   sortUsers,
 }) {
-  // TODO: table sorting
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("id");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const { transaction } = useTransactionContext();
 
   const handleRequestSort = useCallback(
     (event, property) => {
@@ -273,11 +273,11 @@ export function DataTable({
 
   useEffect(() => {
     if (isTx) {
-      setData(customerData);
+      setData(transaction);
     } else {
-      setData(handleDataTransform(customerData));
+      setData(handleDataTransform(transaction));
     }
-  }, [customerData, handleDataTransform, isTx]);
+  }, [transaction, handleDataTransform, isTx]);
 
   return (
     <Paper sx={{ width: "100%", mb: 2 }}>
