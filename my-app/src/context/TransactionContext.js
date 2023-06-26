@@ -1,11 +1,17 @@
 import { createContext, useReducer } from "react";
+import { calcPointsPerTx } from "../helpers/commonHelpers";
 
 export const TransactionContext = createContext();
 
 const transactionReducer = (state, action) => {
   switch (action.type) {
     case "GET_ALL_TX":
-      return { ...state, transaction: action.payload };
+      const updated = action?.payload?.map((d) => ({
+        ...d,
+        points: calcPointsPerTx(d.amount),
+      }));
+      updated?.sort((a, b) => a.id < b.id);
+      return { ...state, transaction: updated };
     default:
       return state;
   }

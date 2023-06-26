@@ -19,6 +19,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { sortUsers } from "../helpers/commonHelpers";
 import {
   getComparator,
   stableSort,
@@ -99,11 +100,7 @@ const TABLE2_HEADING = [
   },
 ];
 
-export function DataTable({
-  isTx,
-  getDataByPoints,
-  sortUsers,
-}) {
+export function DataTable({ isTx, getDataByPoints }) {
   const [data, setData] = useState([]);
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("id");
@@ -157,7 +154,7 @@ export function DataTable({
       }
       return res;
     },
-    [getDataByPoints, sortUsers]
+    [getDataByPoints]
   );
 
   const tableHeading = useMemo(

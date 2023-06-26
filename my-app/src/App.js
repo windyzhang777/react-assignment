@@ -1,48 +1,19 @@
-import { Box } from "@mui/material";
+import { Alert, Box, LinearProgress } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { DataChart } from "./components/DataChart";
 import { DataTabs } from "./components/DataTabs";
+import { useGetTransaction } from "./hooks/useGetTransaction";
 import { useTransactionContext } from "./hooks/useTransactionContext";
 
 export default function App() {
   const [tab, setTab] = useState(0);
-  const { transaction, dispatch } = useTransactionContext();
+  const { isLoading, error, getTransaction } =
+    useGetTransaction();
+  const { transaction } = useTransactionContext();
 
   useEffect(() => {
-    fetch("/getTransactions", {
-      method: "GET",
-      header: { "Context-Type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const updated = data?.map((d) => ({
-          ...d,
-          points: calcPointsPerTx(d.amount),
-        }));
-        updated?.sort((a, b) => a.id < b.id);
-        dispatch({ type: "GET_ALL_TX", payload: updated });
-      });
-  }, [dispatch]);
-
-  const calcPointsPerTx = (tx) => {
-    let points = 0;
-    const txAbs = Math.floor(tx);
-    if (txAbs > 50) {
-      points += Math.min(txAbs, 100) - 50;
-    }
-    if (txAbs > 100) {
-      points += (txAbs - 100) * 2;
-    }
-    return points;
-  };
-
-  const sortUsers = (data) => {
-    const users = Array.from(
-      new Set(data?.map((d) => d.id)).values()
-    );
-    users?.sort((a, b) => a - b);
-    return users;
-  };
+    getTransaction();
+  }, [getTransaction]);
 
   const getDataByPoints = useCallback(
     (userId) => {
@@ -75,16 +46,15 @@ export default function App() {
     setTab(tab);
   };
 
-  return (
+  return isLoading || !transaction ? (
+    <LinearProgress />
+  ) : (
     <Box m={1} sx={{ maxWidth: "800px" }}>
-      <DataChart
-        getDataByPoints={getDataByPoints}
-        sortUsers={sortUsers}
-      />
+      {error && <Alert severity="error">{error}</Alert>}
+      <DataChart getDataByPoints={getDataByPoints} />
       <DataTabs
         getDataByPoints={getDataByPoints}
         handleTabChange={handleTabChange}
-        sortUsers={sortUsers}
         tab={tab}
       />
     </Box>

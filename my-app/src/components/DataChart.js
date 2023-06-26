@@ -9,6 +9,7 @@ import {
 } from "chart.js";
 import React, { useCallback, useMemo } from "react";
 import { Bar } from "react-chartjs-2";
+import { sortUsers } from "../helpers/commonHelpers";
 import { useTransactionContext } from "../hooks/useTransactionContext";
 
 ChartJS.register(
@@ -38,7 +39,7 @@ export const options = {
   },
 };
 
-export function DataChart({ getDataByPoints, sortUsers }) {
+export function DataChart({ getDataByPoints }) {
   const { transaction } = useTransactionContext();
 
   const handleDataTransform = useCallback(
@@ -59,7 +60,7 @@ export function DataChart({ getDataByPoints, sortUsers }) {
       }
       return res;
     },
-    [getDataByPoints, sortUsers]
+    [getDataByPoints]
   );
 
   const data = useMemo(() => {
@@ -83,7 +84,7 @@ export function DataChart({ getDataByPoints, sortUsers }) {
         },
       ],
     };
-  }, [transaction, handleDataTransform, sortUsers]);
+  }, [transaction, handleDataTransform]);
 
   return <Bar options={options} data={data} />;
 }
