@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import { TransactionContextProvider } from "./context/TransactionContext";
+import { TransactionContextProvider } from "./contexts/TransactionContext";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 

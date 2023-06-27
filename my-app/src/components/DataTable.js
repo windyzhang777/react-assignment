@@ -20,7 +20,7 @@ import {
 import {
   TABLE1_HEADING,
   TABLE2_HEADING,
-} from "../constant";
+} from "../constants";
 import { sortUsers } from "../helpers/commonHelpers";
 import {
   getComparator,
