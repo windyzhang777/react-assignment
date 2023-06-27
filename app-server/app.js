@@ -22,11 +22,6 @@ router.get("/", getTransaction);
 app.use("/api/transaction", router);
 
 app.listen(process.env.PORT, (err) => {
-  if (err) {
-    console.log(`err :`, err);
-  } else {
-    console.log(
-      `listening on localhost:${process.env.PORT}`
-    );
-  }
+  if (err) console.log(err);
+  console.log(`listening on localhost:${process.env.PORT}`);
 });
