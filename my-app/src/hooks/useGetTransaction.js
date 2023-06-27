@@ -10,7 +10,7 @@ export const useGetTransaction = () => {
     setIsLoading(true);
     setError(null);
 
-    fetch("/getTransactions", {
+    fetch("/api/transaction", {
       method: "GET",
       header: { "Context-Type": "application/json" },
     })
